@@ -6,16 +6,11 @@ const { Title, Text } = Typography;
 
 export const BeerItem = (props) => {
 
-    const {image_url, name, tagline, brewed, id, handleClick} = props;    
-
-    console.log(props);
-    
-
-    const style = {padding: '8px'}
+    const {image_url, name, tagline, brewed, id} = props;
 
     return (
         <>
-            <Col lg={{ span: 6 }} xs={{ span: 12 }} style={style}>
+            <Col lg={{ span: 6 }} xs={{ span: 12 }} style={{padding: '8px'}}>
                 <Card className="beer-item">
                     <div className="img-container">
                         <img
@@ -33,7 +28,7 @@ export const BeerItem = (props) => {
                         <Text>First brewed: </Text>
                         <Text strong>{brewed}</Text>
                     </div>
-                    <Link to={`/id${id}`} onClick={handleClick}>
+                    <Link to={`/id${id}`}>
                         More info
                     </Link>
                 </Card>

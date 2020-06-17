@@ -1,29 +1,56 @@
-import  { useEffect } from 'react'
+import { useEffect, useState } from 'react';
 
-export const getItems = () => {
-
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
-
-    const url = "https://api.punkapi.com/v2/beers?per_page=80";
+export const useFiltredData = (data, VISIBLE) => {
+    const [renderingData, setRenderingData] = useState([]);
+    const [query, setQuery] = useState('');    
 
     useEffect(() => {
-        const jsonItems = [];
-    
-        const fetchData = async () => {
-          const response = await fetch(url);
-          const result = await response.json();
-    
-          for (let i = 0; i < Math.ceil(result.length / visible); i++) {
-            jsonItems[i] = result.slice(i * visible, i * visible + visible);
-          }
-        };
-    
-        fetchData().then(() => {
-          setItems(jsonItems);
-          setIsLoaded(true);
-        });
-      }, [url]);
+        let filtredData = [];
 
-    return [isLoaded, items]
-} 
+        let sourceData = data.filter(item =>
+            item.name.toLowerCase().startsWith(query.toLowerCase())
+        )
+
+        for (let i = 0; i < Math.ceil(sourceData.length / VISIBLE); i++) {
+            filtredData[i] = sourceData.slice(i * VISIBLE, i * VISIBLE + VISIBLE);
+        };
+        
+        setRenderingData(filtredData);
+                     
+    }, [VISIBLE, data, query])
+    
+    return [query, setQuery, renderingData];
+}
+
+export const useBottomItems = (items, maxRange) => {
+
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [renderingItems, setRenderingItems] = useState([]);
+
+    useEffect(() => {
+        const randomIds = [];
+        const tempData = [];
+
+        function getRandomItems(min, maxRange) {
+
+            for(let i = 0; randomIds.length < 4; i++) {
+                let randomInt =  Math.round( Math.random() * (maxRange - min) + min );
+
+                if(!randomIds.includes(randomInt)) {
+                    randomIds.push(randomInt)
+                }
+            }
+            
+            randomIds.map(int => {
+                return tempData.push(items.find(item => item['id'] === int));
+            });
+        }
+
+        getRandomItems(1, maxRange);
+        setRenderingItems(tempData);
+        setIsLoaded(true);
+
+    }, [items, maxRange])
+    
+    return [renderingItems, isLoaded];
+}

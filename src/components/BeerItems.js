@@ -1,16 +1,16 @@
 import React from "react";
-import { Row } from "antd";
+import { Row, Empty } from "antd";
 
 import { BeerItem } from "./BeerItem";
 
 export const BeerItems = (props) => {
-    const {items, isLoaded, currentPage, handleClick} = props;   
+    const {renderingData, isLoaded, currentPage} = props;    
 
-    if(isLoaded) {
+    if(isLoaded && renderingData.length > 0) {
         return (
             <Row gutter={16}>
                 {
-                    items[currentPage].map(item => {
+                    renderingData[currentPage].map(item => {
                         return (
                             <BeerItem
                                 key={item.id}
@@ -19,8 +19,6 @@ export const BeerItems = (props) => {
                                 tagline={item.tagline}
                                 brewed={item.first_brewed}
                                 id={item.id}
-
-                                handeClick={handleClick}
                             />
                         )
                     })
@@ -28,8 +26,7 @@ export const BeerItems = (props) => {
             </Row>
         )
     } else {
-        return <div>... Loading</div>
+        return <Empty/>
     }
-    
     
 };

@@ -1,13 +1,31 @@
 import React from 'react';
-import { PageHeader } from 'antd';
+import { Typography, Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 
-export const Header = () => {
+const { Title } = Typography;
+
+export const Header = (props) => {
+
+    const {pathname} = props;
+
     return (
         <header>
-            <PageHeader
-                className="site-page-header"
-                title="Beer book"
-            />
+            <Title level={3}>
+                Beer Book App
+            </Title>
+            <Breadcrumb>
+                <Breadcrumb.Item>
+                    <Link to="/">Home</Link>
+                </Breadcrumb.Item>
+                {
+                    pathname.length > 1 
+                    ?   <Breadcrumb.Item>
+                            {pathname.slice(1)}
+                        </Breadcrumb.Item>
+                    : null
+                }
+                
+            </Breadcrumb>
         </header>
     )
 }
